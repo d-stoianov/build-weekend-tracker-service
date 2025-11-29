@@ -1,27 +1,21 @@
 import 'dotenv/config'
 import express from 'express'
-import { createClient } from '@supabase/supabase-js'
+import cors from 'cors'
+import userRoutes from './routes/userRoutes.js'
+import { PORT } from './config.js'
 
 const app = express()
-const PORT = process.env.PORT || 3000
-
-// Create Supabase client
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_API_KEY!,
+app.use(express.json())
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  }),
 )
 
-app.get('/', (_req, res) => {
-  res.send('server is up')
-})
+app.get('/', (_req, res) => res.send('server is up'))
 
-// Example endpoint hitting Supabase
-app.get('/users', async (_req, res) => {
-  const { data, error } = await supabase.from('users').select('*')
-
-  if (error) return res.status(500).json({ error: error.message })
-  res.json({ users: data })
-})
+app.use('/user', userRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
