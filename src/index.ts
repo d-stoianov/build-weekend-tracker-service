@@ -4,13 +4,13 @@ import cors from 'cors'
 import userRoutes from './routes/userRoutes.js'
 import trackerRoutes from './routes/trackerRoutes.js'
 import scenarioRoutes from './routes/scenarioRoutes.js'
-import { PORT } from './config.js'
+import { APP_ORIGIN, PORT } from './config.js'
 
 const app = express()
 app.use(express.json())
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: APP_ORIGIN,
     credentials: true,
   }),
 )

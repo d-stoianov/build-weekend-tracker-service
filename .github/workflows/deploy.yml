@@ -1,0 +1,37 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Copy repo to VPS (optional)
+        run: echo "Using git pull on the server; no upload needed."
+
+      - name: Run SSH commands on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_KEY }}
+          port: 22
+          script: |
+            cd /home/notifyer-me/build-weekend-tracker-service
+            git pull
+            npm install
+            npm run build
+
+            pm2 describe notifyer-api > /dev/null 2>&1
+            if [ $? -eq 0 ]; then
+              pm2 restart notifyer-api
+            else
+              pm2 start dist/index.js --name notifyer-api
+            fi
