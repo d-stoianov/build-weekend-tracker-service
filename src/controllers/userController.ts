@@ -1,6 +1,10 @@
+import { Request, Response } from 'express'
 import { createUser, getUserById } from '../services/userService.js'
 
-export const createUserEndpoint = async (req, res) => {
+export const createUserEndpoint = async (
+  req: Request & { user?: any },
+  res: Response,
+) => {
   try {
     const authUser = req.user
     if (!authUser) return res.status(401).json({ error: 'Not authenticated' })
@@ -14,7 +18,7 @@ export const createUserEndpoint = async (req, res) => {
   }
 }
 
-export const getUser = async (req, res) => {
+export const getUser = async (req: Request & { user?: any }, res: Response) => {
   try {
     // req.user is set by the auth middleware
     const authUser = req.user

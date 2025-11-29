@@ -38,3 +38,20 @@ export const getUserById = async (userId: string) => {
 
   return data
 }
+
+export const getUserPrimaryKeyByAuthId = async (
+  authUserId: string,
+): Promise<number | null> => {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id')
+    .eq('user_id', authUserId)
+    .single()
+
+  if (error) {
+    console.error('Error fetching user primary key:', error.message)
+    return null
+  }
+
+  return data?.id || null
+}

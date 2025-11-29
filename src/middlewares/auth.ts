@@ -1,6 +1,11 @@
+import { Request, Response, NextFunction } from 'express'
 import { supabase } from '../db/supabase.js'
 
-export const requireAuth = async (req, res, next) => {
+export const requireAuth = async (
+  req: Request & { user?: any },
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const authHeader = req.headers.authorization
     const token =
@@ -11,8 +16,6 @@ export const requireAuth = async (req, res, next) => {
     }
 
     const { data, error } = await supabase.auth.getUser(token)
-
-    console.log(token)
 
     if (error || !data.user) {
       return res.status(401).json({ error: 'Invalid session' })
