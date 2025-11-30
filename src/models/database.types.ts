@@ -60,6 +60,7 @@ export type Database = {
         Row: {
           description: string | null
           name: string
+          outputs: Json | null
           parameters: Json | null
           scenario_id: number
           workflow_id: string | null
@@ -67,6 +68,7 @@ export type Database = {
         Insert: {
           description?: string | null
           name: string
+          outputs?: Json | null
           parameters?: Json | null
           scenario_id?: number
           workflow_id?: string | null
@@ -74,6 +76,7 @@ export type Database = {
         Update: {
           description?: string | null
           name?: string
+          outputs?: Json | null
           parameters?: Json | null
           scenario_id?: number
           workflow_id?: string | null
@@ -82,12 +85,12 @@ export type Database = {
       }
       trackers: {
         Row: {
-          actions: Json | null
           created_at: string | null
           description: string | null
           interval: number | null
           is_active: boolean | null
           name: string | null
+          outputs: Json | null
           parameters: Json | null
           scenario_id: number | null
           time: string | null
@@ -96,12 +99,12 @@ export type Database = {
           workflow_id: string | null
         }
         Insert: {
-          actions?: Json | null
           created_at?: string | null
           description?: string | null
           interval?: number | null
           is_active?: boolean | null
           name?: string | null
+          outputs?: Json | null
           parameters?: Json | null
           scenario_id?: number | null
           time?: string | null
@@ -110,12 +113,12 @@ export type Database = {
           workflow_id?: string | null
         }
         Update: {
-          actions?: Json | null
           created_at?: string | null
           description?: string | null
           interval?: number | null
           is_active?: boolean | null
           name?: string | null
+          outputs?: Json | null
           parameters?: Json | null
           scenario_id?: number | null
           time?: string | null

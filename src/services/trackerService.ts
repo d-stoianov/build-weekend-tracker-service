@@ -54,12 +54,12 @@ export const createTracker = async (
     interval: trackerData.interval ?? null,
     time: trackerData.time ?? null,
     parameters: trackerData.parameters as any,
+    outputs: trackerData?.outputs ?? null,
     name: trackerData.name ?? null,
     description: trackerData.description ?? null,
-    actions: trackerData.actions as any,
-    is_active: (trackerData as any).is_active ?? null,
+    is_active: (trackerData as any).is_active ?? true,
     created_at: new Date().toISOString(),
-    scenario_id: (trackerData as any).scenario_id ?? null,
+    scenario_id: (trackerData as any).scenarioId ?? null,
     workflow_id: (trackerData as any).workflow_id ?? null,
   }
 
@@ -92,8 +92,8 @@ export const updateTracker = async (
   if (trackerData.name !== undefined) updateData.name = trackerData.name
   if (trackerData.description !== undefined)
     updateData.description = trackerData.description
-  if (trackerData.actions !== undefined)
-    updateData.actions = trackerData.actions as any
+  if (trackerData.outputs !== undefined)
+    updateData.outputs = trackerData.outputs as any
   if (trackerData.isActive !== undefined)
     updateData.is_active = trackerData.isActive
 
@@ -176,7 +176,6 @@ export const getTrackerHistory = async (
 }
 
 function transformTracker(dbTracker: SupabaseTracker): Tracker {
-  console.log(dbTracker)
   return {
     id: dbTracker.tracker_id,
     interval: dbTracker.interval,
@@ -184,7 +183,7 @@ function transformTracker(dbTracker: SupabaseTracker): Tracker {
     parameters: (dbTracker.parameters as unknown as Parameter[]) || [],
     name: dbTracker.name,
     description: dbTracker.description,
-    actions: dbTracker.actions as any,
+    outputs: dbTracker?.outputs ?? null,
     isActive: dbTracker.is_active,
     createdAt: dbTracker.created_at,
     scenarioId: dbTracker.scenario_id,
