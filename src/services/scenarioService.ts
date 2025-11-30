@@ -15,6 +15,26 @@ export const getAllScenarios = async (): Promise<Scenario[]> => {
   return data.map(transformScenario)
 }
 
+export const getScenarioById = async (
+  scenarioId: number,
+): Promise<Scenario | null> => {
+  const { data, error } = await supabase
+    .from('scenarios')
+    .select('*')
+    .eq('scenario_id', scenarioId)
+    .single()
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      return null
+    }
+    console.error('Error fetching scenario:', error)
+    throw error
+  }
+
+  return transformScenario(data)
+}
+
 function transformScenario(dbScenario: SupabaseScenario): Scenario {
   return {
     id: dbScenario.scenario_id,

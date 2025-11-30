@@ -1,4 +1,5 @@
 import { supabase } from '../db/supabase.js'
+import { getAllScenarios, getScenarioById } from './scenarioService.js'
 import type {
   Tracker,
   SupabaseTracker,
@@ -49,6 +50,15 @@ export const createTracker = async (
   userId: number,
   trackerData: Omit<Tracker, 'id'>,
 ): Promise<Tracker> => {
+  let workflowId: string | null = null
+
+  if (trackerData.scenarioId) {
+    const scenario = await getScenarioById(trackerData.scenarioId)
+    if (scenario) {
+      workflowId = scenario.workflow_id
+    }
+  }
+
   const insertData: Omit<SupabaseTracker, 'tracker_id'> = {
     user_id: userId,
     interval: trackerData.interval ?? null,
@@ -59,8 +69,8 @@ export const createTracker = async (
     description: trackerData.description ?? null,
     is_active: (trackerData as any).is_active ?? true,
     created_at: new Date().toISOString(),
-    scenario_id: (trackerData as any).scenarioId ?? null,
-    workflow_id: (trackerData as any).workflow_id ?? null,
+    scenario_id: trackerData.scenarioId ?? null,
+    workflow_id: workflowId,
   }
 
   const { data, error } = await supabase
