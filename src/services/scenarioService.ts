@@ -21,6 +21,7 @@ function transformScenario(dbScenario: SupabaseScenario): Scenario {
     name: dbScenario.name,
     description: dbScenario.description,
     parameters: (dbScenario.parameters as unknown as Parameter[]) || [],
+    outputs: dbScenario.outputs,
     workflow_id: dbScenario.workflow_id,
   }
 }

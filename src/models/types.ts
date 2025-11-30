@@ -34,9 +34,13 @@ export type Tracker = Omit<
   parameters: Parameter[]
 }
 
-export type Scenario = Omit<SupabaseScenario, 'scenario_id' | 'parameters'> & {
+export type Scenario = Omit<
+  SupabaseScenario,
+  'scenario_id' | 'parameters' | 'outputs'
+> & {
   id: SupabaseScenario['scenario_id']
   parameters: Parameter[]
+  outputs: SupabaseScenario['outputs']
 }
 
 export type SupabaseHistory = Database['public']['Tables']['histories']['Row']

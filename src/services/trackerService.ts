@@ -130,6 +130,18 @@ export const deleteTracker = async (
     throw new Error('Invalid tracker ID')
   }
 
+  // Delete all history records for this tracker (cascade deletion)
+  const { error: historyError } = await supabase
+    .from('histories')
+    .delete()
+    .eq('tracker_id', trackerIdNum)
+
+  if (historyError) {
+    console.error('Error deleting tracker history:', historyError)
+    throw historyError
+  }
+
+  // Delete the tracker
   const { error } = await supabase
     .from('trackers')
     .delete()
