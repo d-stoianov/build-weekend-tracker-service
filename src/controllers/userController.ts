@@ -1,5 +1,10 @@
 import { Request, Response } from 'express'
-import { createUser, getUserById } from '../services/userService.js'
+import {
+  createUser,
+  getUserById,
+  getUserPrimaryKeyByAuthId,
+  deleteUser,
+} from '../services/userService.js'
 
 export const createUserEndpoint = async (
   req: Request & { user?: any },
@@ -33,6 +38,27 @@ export const getUser = async (req: Request & { user?: any }, res: Response) => {
     res.json(profile)
   } catch (err) {
     console.error('Error in getUser controller:', err)
+    res.status(500).json({ error: 'Server error' })
+  }
+}
+
+export const deleteUserEndpoint = async (
+  req: Request & { user?: any },
+  res: Response,
+) => {
+  try {
+    const authUser = req.user
+    if (!authUser) return res.status(401).json({ error: 'Not authenticated' })
+
+    const userId = await getUserPrimaryKeyByAuthId(authUser.id)
+    if (!userId) {
+      return res.status(404).json({ error: 'User not found' })
+    }
+
+    await deleteUser(userId)
+    res.status(204).send()
+  } catch (err) {
+    console.error('Error in deleteUser controller:', err)
     res.status(500).json({ error: 'Server error' })
   }
 }
